@@ -16,6 +16,7 @@ if ($useSsl) {
 
 $clientFlags = $useSsl ? MYSQLI_CLIENT_SSL : 0;
 if (!@mysqli_real_connect($mysqli, $host, $user, $password, $bd, $port, null, $clientFlags)) {
+    error_log('DB connection failed [' . mysqli_connect_errno() . ']: ' . mysqli_connect_error());
     http_response_code(500);
     exit('No se pudo conectar a la base de datos.');
 }
