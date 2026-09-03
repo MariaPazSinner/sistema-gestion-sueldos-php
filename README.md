@@ -51,4 +51,3 @@ PHP se ejecuta mediante el runtime comunitario `vercel-php`; Vercel no ofrece PH
 ![Menú principal](screenshots/menu.png)
 
 ![Listado de sueldos](screenshots/listado.png)
-

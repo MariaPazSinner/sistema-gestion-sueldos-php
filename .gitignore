@@ -1,0 +1,19 @@
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# VS Code
+.vscode/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# El volcado original contiene datos personales y no debe publicarse
+database/proyecto_con_triggers.sql
