@@ -39,7 +39,7 @@ El volcado original se excluye del repositorio porque contiene datos personales,
 
 1. Crear una base MySQL accesible desde Internet e importar `database/demo.sql`.
 2. Importar este repositorio en Vercel.
-3. Definir `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` y `DB_SSL` en las variables de entorno del proyecto.
+3. Conectar TiDB Cloud para inyectar `TIDB_HOST`, `TIDB_PORT`, `TIDB_USER`, `TIDB_PASSWORD` y `TIDB_DATABASE`; también se admiten las variables `DB_*` de `.env.example`.
 4. Desplegar. La raíz se redirige automáticamente al inicio de sesión.
 
 PHP se ejecuta mediante el runtime comunitario `vercel-php`; Vercel no ofrece PHP como runtime oficial.

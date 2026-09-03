@@ -1,15 +1,15 @@
 <?php
 // Las credenciales se configuran en variables de entorno. Nunca se publican.
-$host = getenv('DB_HOST') ?: 'localhost';
-$port = (int) (getenv('DB_PORT') ?: 3306);
-$user = getenv('DB_USER') ?: 'root';
-$password = getenv('DB_PASSWORD') ?: '';
-$bd = getenv('DB_NAME') ?: 'basededatosproyecto';
+$host = getenv('TIDB_HOST') ?: (getenv('DB_HOST') ?: 'localhost');
+$port = (int) (getenv('TIDB_PORT') ?: (getenv('DB_PORT') ?: 3306));
+$user = getenv('TIDB_USER') ?: (getenv('DB_USER') ?: 'root');
+$password = getenv('TIDB_PASSWORD') ?: (getenv('DB_PASSWORD') ?: '');
+$bd = getenv('TIDB_DATABASE') ?: (getenv('DB_NAME') ?: 'basededatosproyecto');
 
 mysqli_report(MYSQLI_REPORT_OFF);
 $mysqli = mysqli_init();
 
-if (getenv('DB_SSL') === 'true') {
+if (getenv('DB_SSL') === 'true' || getenv('TIDB_HOST')) {
     mysqli_ssl_set($mysqli, null, null, null, null, null);
 }
 
