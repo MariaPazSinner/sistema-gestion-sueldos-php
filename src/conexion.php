@@ -9,11 +9,13 @@ $bd = getenv('TIDB_DATABASE') ?: (getenv('DB_NAME') ?: 'basededatosproyecto');
 mysqli_report(MYSQLI_REPORT_OFF);
 $mysqli = mysqli_init();
 
-if (getenv('DB_SSL') === 'true' || getenv('TIDB_HOST')) {
+$useSsl = filter_var(getenv('DB_SSL'), FILTER_VALIDATE_BOOLEAN) || getenv('TIDB_HOST');
+if ($useSsl) {
     mysqli_ssl_set($mysqli, null, null, null, null, null);
 }
 
-if (!@mysqli_real_connect($mysqli, $host, $user, $password, $bd, $port)) {
+$clientFlags = $useSsl ? MYSQLI_CLIENT_SSL : 0;
+if (!@mysqli_real_connect($mysqli, $host, $user, $password, $bd, $port, null, $clientFlags)) {
     http_response_code(500);
     exit('No se pudo conectar a la base de datos.');
 }
