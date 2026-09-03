@@ -1,13 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "api/*.php": {
+    "api/index.php": {
       "runtime": "vercel-php@0.9.0"
     }
   },
   "routes": [
-    { "src": "/", "dest": "/api/logininiciosesiones.php" },
+    { "src": "/", "dest": "/api/index.php" },
     { "handle": "filesystem" },
-    { "src": "/(.*\\.php)", "dest": "/api/$1" }
+    { "src": "/(.*\\.php)", "dest": "/api/index.php" }
   ]
 }
