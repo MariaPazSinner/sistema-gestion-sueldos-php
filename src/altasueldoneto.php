@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-    <form action="cargarsueldoneto.php" method="POST" class="screen-card compact-form">
+    <form action="terminarsueldoneto.php" method="POST" class="screen-card compact-form" id="liquidacion-form">
         <div class="screen-heading">
             <span class="eyebrow">Liquidaciones</span>
             <h1>Nueva liquidación</h1>
@@ -125,7 +125,7 @@
             <input type="number" name="cantidadHE" id="cantidadHE" min="0" max="360" required>
         </div>
         <div>
-            <input type="submit" id="cargar" value="Calcular liquidación">
+            <input type="submit" id="cargar" value="Revisar y liquidar">
         </div>
     </form>
 </body>

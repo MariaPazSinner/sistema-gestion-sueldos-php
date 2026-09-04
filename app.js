@@ -142,6 +142,32 @@
     });
   });
 
+  const liquidationForm = document.querySelector('#liquidacion-form');
+  if (liquidationForm) {
+    liquidationForm.addEventListener('submit', (event) => {
+      if (liquidationForm.dataset.confirmed === 'true') return;
+      event.preventDefault();
+      const employee = liquidationForm.querySelector('#DNI')?.selectedOptions[0]?.textContent.trim() || '';
+      const period = liquidationForm.querySelector('#periodo')?.value || '';
+      const values = [
+        ['Empleado', employee], ['Período', period],
+        ['Ausencias remuneradas', liquidationForm.querySelector('#cantidadAR')?.value || '0'],
+        ['Ausencias no remuneradas', liquidationForm.querySelector('#cantidadANR')?.value || '0'],
+        ['Horas extra en feriados', liquidationForm.querySelector('#cantidadHEFER')?.value || '0'],
+        ['Horas extra regulares', liquidationForm.querySelector('#cantidadHE')?.value || '0']
+      ];
+      const modal = document.createElement('div');
+      modal.className = 'app-modal';
+      modal.innerHTML = `<div class="app-modal-card review-modal" role="dialog" aria-modal="true" aria-labelledby="review-title"><span class="eyebrow">Revisión final</span><h3 id="review-title">Confirmar liquidación</h3><p>Comprobá los datos antes de registrar el período.</p><div class="review-list">${values.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join('')}</div><div class="modal-actions"><button type="button" class="secondary-action cancel-review">Volver a editar</button><button type="button" class="confirm-review">Confirmar y liquidar</button></div></div>`;
+      body.append(modal);
+      requestAnimationFrame(() => modal.classList.add('is-visible'));
+      const close = () => { modal.classList.remove('is-visible'); setTimeout(() => modal.remove(), 180); };
+      modal.querySelector('.cancel-review').addEventListener('click', close);
+      modal.querySelector('.confirm-review').addEventListener('click', () => { close(); liquidationForm.dataset.confirmed = 'true'; liquidationForm.requestSubmit(); });
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    });
+  }
+
   document.querySelectorAll('.info-btn').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();

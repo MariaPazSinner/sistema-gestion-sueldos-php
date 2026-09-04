@@ -401,12 +401,11 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
 
 /* Unified application screens */
 .screen-card {
-  width: min(100%, 880px); margin: 0 auto; padding: clamp(26px, 4vw, 48px);
+  width: min(100%, 1120px); margin: 0 auto; padding: clamp(26px, 4vw, 48px);
   border: 1px solid rgba(255,255,255,.58); border-radius: 24px;
   background: rgba(255,255,255,.96); box-shadow: var(--shadow); box-sizing: border-box;
 }
-.screen-card.wide-card { width: min(100%, 1180px); }
-.screen-card.compact-form { width: min(100%, 720px); }
+.screen-card.wide-card, .screen-card.compact-form, .screen-card.report-card { width: min(100%, 1120px); }
 .screen-heading { margin-bottom: 28px; }
 .screen-heading h1, .title-block h1 { margin: 5px 0 8px; text-align: left; }
 .screen-heading p, .title-block p { max-width: 680px; margin: 0; color: var(--muted); line-height: 1.55; }
@@ -433,7 +432,7 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
 .table-shell td small { display: block; margin-top: 4px; color: var(--muted); }
 .row-actions { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 .row-actions form { margin: 0 !important; padding: 0 !important; background: none !important; box-shadow: none !important; }
-.area-pill { display: inline-flex; padding: 5px 9px; border-radius: 999px; color: #38506f; background: #edf3fa; font-size: .78rem; font-weight: 700; }
+.area-cell { min-width: 150px; white-space: normal; line-height: 1.35; }
 .empty-state { padding: 34px !important; color: var(--muted); text-align: center; }
 .status-message { padding: 12px 14px; border-radius: 11px; color: #24633c; background: #eaf7ee; }
 .employee-summary, .report-intro { display: grid; gap: 4px; margin: 0 0 22px; padding: 16px 18px; border: 1px solid #f0d8ca; border-radius: 14px; background: #fff8f3; }
@@ -452,14 +451,50 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
 .modal-actions button { width: auto !important; margin: 0 !important; }
 .confirm-delete { color: #fff; background: var(--danger) !important; }
 a.back-link[href="menusesiones.php"], a.back-button[href="menusesiones.php"], body > a[href="menusesiones.php"] { display: none !important; }
-.page-altaempleados > fieldset { width: min(100%, 880px) !important; max-width: 880px !important; }
+.page-altaempleados > fieldset { width: min(100%, 1120px) !important; max-width: 1120px !important; }
 .page-altaempleados #empleado-form > br { display: none; }
+.page-altaempleados #filtrar-lb, .page-altaempleados #puesto-filter, .page-altaempleados #empleados-table { display: none !important; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+.success-badge { padding: 8px 12px; border-radius: 999px; color: #197044; background: #e9f7ef; font-weight: 750; white-space: nowrap; }
+.payroll-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-bottom: 24px; }
+.payroll-summary > div { display: grid; gap: 6px; padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: #f8fafc; }
+.payroll-summary span, .detail-row span { color: var(--muted); }
+.payroll-summary strong { font-size: 1.2rem; }
+.payroll-summary .net-total { border-color: #f1cdbb; background: #fff7f2; }
+.payroll-summary .net-total strong { color: var(--brand-dark); }
+.payroll-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.payroll-columns section, .receipt-lines { padding: 20px; border: 1px solid var(--line); border-radius: 16px; }
+.payroll-columns h2 { margin: 0 0 14px; font-size: 1rem; text-align: left; }
+.detail-row { display: flex; justify-content: space-between; gap: 20px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.detail-row:last-child { border-bottom: 0; }
+.receipt-header, .employee-detail { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.receipt-header { padding-bottom: 24px; border-bottom: 2px solid var(--ink); }
+.receipt-header h1 { margin: 5px 0; text-align: left; }
+.receipt-header p { margin: 0; color: var(--muted); }
+.receipt-period, .employee-detail > div { display: grid; gap: 5px; }
+.receipt-period span, .employee-detail span { color: var(--muted); font-size: .82rem; }
+.employee-detail { margin: 22px 0; padding: 18px; border-radius: 14px; background: #f7f9fc; }
+.receipt-total { margin-top: 8px; border-top: 2px solid var(--line); }
+.receipt-net { margin-top: 8px; padding-top: 18px; font-size: 1.2rem; border-top: 2px solid var(--ink); }
+.receipt-net strong { color: var(--brand-dark); }
+.receipt-note { color: var(--muted); font-size: .84rem; }
+.review-modal { width: min(560px,100%); }
+.review-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 18px; }
+.review-list > div { display: grid; gap: 3px; padding: 11px 12px; border-radius: 10px; background: #f6f8fb; }
+.review-list span { color: var(--muted); font-size: .78rem; }
+.confirm-review { color: #fff; background: var(--brand) !important; }
 
 @media (max-width: 760px) {
   .screen-card { padding: 24px 18px; border-radius: 18px; }
   .screen-toolbar { flex-direction: column; }
   .screen-toolbar .primary-action { width: 100%; }
-  .filter-grid, .report-summary { grid-template-columns: 1fr; }
+  .filter-grid, .report-summary, .payroll-summary, .payroll-columns, .review-list { grid-template-columns: 1fr; }
   .employee-summary { grid-template-columns: 1fr; }
   .filter-actions, .form-actions { flex-wrap: wrap; }
+}
+
+@media print {
+  body { display: block !important; padding: 0 !important; background: #fff !important; }
+  .app-header, .app-menu, .no-print, .header-actions { display: none !important; }
+  .screen-card { width: 100% !important; margin: 0 !important; padding: 20px !important; border: 0 !important; box-shadow: none !important; }
 }
