@@ -242,7 +242,21 @@ tbody tr:hover td { background: #fff8f3 !important; }
   animation: header-in .45s ease both;
 }
 
-.app-brand { display: flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; }
+.app-brand {
+  display: flex !important;
+  align-items: center;
+  gap: 11px;
+  width: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #fff !important;
+  text-decoration: none;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
 .app-brand-mark {
   display: grid; place-items: center; width: 37px; height: 37px;
   border-radius: 11px; color: #fff; font: 800 .86rem "Manrope", sans-serif;
