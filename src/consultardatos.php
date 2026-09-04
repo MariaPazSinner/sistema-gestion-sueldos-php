@@ -1,264 +1,34 @@
 <?php
 include 'conexion.php';
-
-$dni = isset($_POST['DNI']) ? $_POST['DNI'] : '';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['accion'] === 'eliminar') {
-    $dni = isset($_POST['dniEliminar']) ? $_POST['dniEliminar'] : '';
-
-    if (!empty($dni)) {
-        $dni_escapado = mysqli_real_escape_string($mysqli, $dni);
-
-        // Consulta para verificar si el empleado existe
-        $consulta_empleado = "SELECT * FROM empleados WHERE DNI = '$dni_escapado'";
-        $resultado_empleado = mysqli_query($mysqli, $consulta_empleado);
-
-        if (mysqli_num_rows($resultado_empleado) == 0) {
-            // Redirigir a la misma página con mensaje de error
-            header("Location: consultardatos.php?mensaje=El empleado con DNI $dni no existe en la base de datos.");
-            exit();
-        } else {
-            // Borrar el empleado
-            $borrar_empleado = "DELETE FROM empleados WHERE DNI = '$dni_escapado'";
-            if (mysqli_query($mysqli, $borrar_empleado)) {
-                // Redirigir a la misma página con mensaje de éxito
-                header("Location: consultardatos.php?mensaje=Empleado con DNI $dni ha sido eliminado exitosamente.");
-                exit();
-            } else {
-                // Redirigir a la misma página con mensaje de error
-                $error = mysqli_error($mysqli);
-                header("Location: consultardatos.php?mensaje=Error al eliminar el empleado: $error");
-                exit();
-            }
-        }
-    }
+$dni = $_POST['DNI'] ?? 'todos';
+$departamento = $_POST['departamento'] ?? 'todos';
+$condiciones = [];
+if ($dni !== '' && $dni !== 'todos') {
+    $dni_escapado = mysqli_real_escape_string($mysqli, $dni);
+    $condiciones[] = "e.DNI = '$dni_escapado'";
 }
-
-// Consulta para obtener los datos de los empleados
-if (empty($dni) || $dni === "todos") {
-    $consultaTabla = "SELECT e.DNI, e.nombre, e.apellido, e.celular, e.mail, p.nombre AS nombre_puesto, d.nombre AS nombre_departamento, e.salarioBruto, e.id_usuario
-                      FROM empleados e
-                      LEFT JOIN puestos p ON e.id_puestos = p.id_puestos
-                      LEFT JOIN departamento d ON p.id_departamento = d.id_departamento";
-} else {
-    $consultaTabla = "SELECT e.DNI, e.nombre, e.apellido, e.celular, e.mail, p.nombre AS nombre_puesto, d.nombre AS nombre_departamento, e.salarioBruto, e.id_usuario
-                      FROM empleados e
-                      LEFT JOIN puestos p ON e.id_puestos = p.id_puestos
-                      LEFT JOIN departamento d ON p.id_departamento = d.id_departamento
-                      WHERE e.DNI = '$dni'";
+if ($departamento !== '' && $departamento !== 'todos') {
+    $departamento_escapado = mysqli_real_escape_string($mysqli, $departamento);
+    $condiciones[] = "d.id_departamento = '$departamento_escapado'";
 }
-
+$consultaTabla = "SELECT e.DNI, e.nombre, e.apellido, e.celular, e.mail, p.nombre AS nombre_puesto, d.nombre AS nombre_departamento, e.salarioBruto FROM empleados e LEFT JOIN puestos p ON e.id_puestos = p.id_puestos LEFT JOIN departamento d ON p.id_departamento = d.id_departamento";
+if ($condiciones) $consultaTabla .= ' WHERE ' . implode(' AND ', $condiciones);
+$consultaTabla .= ' ORDER BY e.apellido, e.nombre';
 $resultado = mysqli_query($mysqli, $consultaTabla);
-if (!$resultado) {
-    echo "Error: " . mysqli_error($mysqli);
-}
+$empleados = mysqli_query($mysqli, "SELECT DNI, nombre, apellido FROM empleados ORDER BY apellido, nombre");
+$departamentos = mysqli_query($mysqli, "SELECT id_departamento, nombre FROM departamento ORDER BY nombre");
 ?>
-
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista Empleados</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-            height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-image: url("fondonaranja.jpeg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 900px;
-            box-sizing: border-box;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-        select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            display: block;
-        }
-        input[type="submit"] {
-            background: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: inline-block;
-        }
-        input[type="submit"]:hover {
-            background: #0056b3;
-        }
-        table {
-            width: 100%;
-            background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .back-link {
-            display: block;
-            margin-top: 20px;
-            padding: 10px;
-            background: #007bff;
-            border-radius: 4px;
-            color: #fff;
-            text-decoration: none;
-            width: 100%;
-            max-width: 200px;
-            text-align: center;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .back-link:hover {
-            background: #0056b3;
-        }
-        .custom-button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.custom-button:hover {
-    background-color: #0056b3;
-}
-
-.custom-button:active {
-    background-color: #004080;
-}
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Empleados</h1>
-
-        <!-- Mostrar el mensaje si existe -->
-        <?php
-        if (isset($_GET['mensaje']) && !empty($_GET['mensaje'])) {
-            $mensaje = htmlspecialchars($_GET['mensaje']);
-            echo '<p style="font-family: Arial, sans-serif; color: green; text-align: center; margin-top: 10px;">' . $mensaje . '</p>';
-        }
-        ?>
-
-        <!-- Formulario para filtrar por DNI -->
-        <form method="POST">
-            <label for="DNI">Filtrar por DNI:</label>
-            <select id="DNI" name="DNI">
-                <option value="todos">Todos</option>
-                <?php
-                // Obtener DNIs disponibles desde la base de datos
-                $query_dnies = "SELECT DISTINCT DNI FROM empleados";
-                $result_dnies = mysqli_query($mysqli, $query_dnies);
-                
-                while ($row = mysqli_fetch_assoc($result_dnies)) {
-                    $selected = ($dni == $row['DNI']) ? 'selected' : '';
-                    echo "<option value='" . $row['DNI'] . "' $selected>" . $row['DNI'] . "</option>";
-                }
-                ?>
-            </select>
-            <input type="submit" value="Filtrar">
-        </form>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Celular</th>
-                    <th>Mail</th>
-                    <th>Puesto</th>
-                    <th>Departamento</th>
-                    <th>Salario Bruto</th>
-                    <th>Borrar</th>
-                    <th>Modificar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Iterar sobre los resultados y mostrarlos en la tabla
-                while ($fila = mysqli_fetch_assoc($resultado)) {
-                    ?>
-                    <tr>
-                        <td><?php echo $fila['DNI']; ?></td>
-                        <td><?php echo $fila['nombre']; ?></td>
-                        <td><?php echo $fila['apellido']; ?></td>
-                        <td><?php echo $fila['celular']; ?></td>
-                        <td><?php echo $fila['mail']; ?></td>
-                        <td><?php echo $fila['nombre_puesto']; ?></td>
-                        <td><?php echo $fila['nombre_departamento']; ?></td>
-                        <td><?php echo '$' . number_format($fila['salarioBruto'], 2, '.', ','); ?></td>
-                        <!-- Botón en consultardatos.php -->
-                         <td><form action="borrarempleado.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="dniEliminar" value="<?php echo $fila['DNI']; ?>">
-                            <input type="hidden" name="accion" value="eliminar">
-                            <button type="submit" class="custom-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este empleado?');">Borrar</button>
-                        </form></td>
-                        <td><a class="custom-button" href="modificarempleado.php?DNI=<?php echo $fila['DNI']; ?>" >Modificar</a></td>
-
-
-                     </tr>
-                    <?php
-                }
-                ?>
-            </tbody>
-        </table>
-
-        <a class="back-link" href="menusesiones.php">Ir al menú</a>
-    </div>
-</body>
-</html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Gestión de empleados</title></head>
+<body><main class="screen-card wide-card">
+<header class="screen-toolbar"><div class="title-block"><span class="eyebrow">Personas</span><h1>Empleados</h1><p>Consultá la información del equipo, filtrá por área y accedé a las acciones habituales.</p></div><a class="primary-action" href="altaempleados.php">+ Agregar empleado</a></header>
+<?php if (!empty($_GET['mensaje'])): ?><p class="status-message"><?php echo htmlspecialchars($_GET['mensaje'], ENT_QUOTES, 'UTF-8'); ?></p><?php endif; ?>
+<form method="POST" class="filter-panel"><div class="filter-grid">
+<div><label for="DNI">Empleado</label><select id="DNI" name="DNI"><option value="todos">Todos los empleados</option><?php while ($empleado = mysqli_fetch_assoc($empleados)): ?><option value="<?php echo htmlspecialchars($empleado['DNI']); ?>" <?php echo $dni == $empleado['DNI'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($empleado['apellido'] . ', ' . $empleado['nombre'] . ' · ' . $empleado['DNI']); ?></option><?php endwhile; ?></select></div>
+<div><label for="departamento">Área de trabajo</label><select id="departamento" name="departamento"><option value="todos">Todas las áreas</option><?php while ($area = mysqli_fetch_assoc($departamentos)): ?><option value="<?php echo htmlspecialchars($area['id_departamento']); ?>" <?php echo $departamento == $area['id_departamento'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($area['nombre']); ?></option><?php endwhile; ?></select></div>
+</div><div class="filter-actions"><button type="submit">Aplicar filtros</button><a class="text-action" href="consultardatos.php">Limpiar</a></div></form>
+<div class="table-shell"><table><thead><tr><th>DNI</th><th>Empleado</th><th>Contacto</th><th>Puesto</th><th>Área</th><th>Salario bruto</th><th>Acciones</th></tr></thead><tbody>
+<?php if ($resultado && mysqli_num_rows($resultado) > 0): while ($fila = mysqli_fetch_assoc($resultado)): ?>
+<tr><td><?php echo htmlspecialchars($fila['DNI']); ?></td><td><strong><?php echo htmlspecialchars($fila['apellido'] . ', ' . $fila['nombre']); ?></strong></td><td><?php echo htmlspecialchars($fila['mail']); ?><small><?php echo htmlspecialchars($fila['celular']); ?></small></td><td><?php echo htmlspecialchars($fila['nombre_puesto'] ?? 'Sin asignar'); ?></td><td><span class="area-pill"><?php echo htmlspecialchars($fila['nombre_departamento'] ?? 'Sin asignar'); ?></span></td><td>$<?php echo number_format((float)$fila['salarioBruto'], 2, ',', '.'); ?></td><td class="row-actions"><a class="table-action" href="modificarempleado.php?DNI=<?php echo urlencode($fila['DNI']); ?>">Editar</a><form action="borrarempleado.php" method="POST" data-confirm-delete="employee"><input type="hidden" name="dniEliminar" value="<?php echo htmlspecialchars($fila['DNI']); ?>"><input type="hidden" name="accion" value="eliminar"><button type="submit" class="danger-action">Eliminar</button></form></td></tr>
+<?php endwhile; else: ?><tr><td colspan="7" class="empty-state">No encontramos empleados con esos filtros.</td></tr><?php endif; ?>
+</tbody></table></div></main></body></html>

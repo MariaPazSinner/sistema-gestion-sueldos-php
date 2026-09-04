@@ -1,137 +1,33 @@
 <?php
 include 'conexion.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $dni = $_POST['dni'];
-    $fecha_inicio = $_POST['fecha_inicio'];
-    $fecha_fin = $_POST['fecha_fin'];
-
-    $query2 = "SELECT nombre FROM empleados WHERE DNI = '$dni'";
-    $result2 = mysqli_query($mysqli, $query2);
-    $row2 = mysqli_fetch_assoc($result2);
-    $nombre = $row2['nombre'];
-
-    // Convertir las fechas a formato compatible con SQL (YYYY-MM)
-    $fecha_inicio_sql = date('Y-m-d', strtotime($fecha_inicio . "-01 -1 month")) . "-01";
-    $fecha_fin_sql = $fecha_fin . "-31";
-
-    // Consultar los salarios del empleado en el período seleccionado
-    $sql = "SELECT periodo, salario FROM registro WHERE DNI = '$dni' AND periodo BETWEEN '$fecha_inicio_sql' AND '$fecha_fin_sql' ORDER BY periodo";
-    $result = mysqli_query($mysqli, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        $salarios = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $salarios[] = $row;
-        }
-
-        // Calcular el porcentaje de aumento o disminución de salarios
-        $inicio_salario = $salarios[0]['salario'];
-        $fin_salario = end($salarios)['salario'];
-        $cambio_porcentaje = (($fin_salario - $inicio_salario) / $inicio_salario) * 100;
+$error = '';
+$salarios = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $dni = $_POST['dni'] ?? '';
+    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+    $fecha_fin = $_POST['fecha_fin'] ?? '';
+    if (!$dni || !$fecha_inicio || !$fecha_fin || $fecha_inicio > $fecha_fin) {
+        $error = 'Revisá el empleado y el rango de períodos seleccionado.';
     } else {
-        $error = "No se encontraron registros de salarios para el período seleccionado.";
+        $dni_sql = mysqli_real_escape_string($mysqli, $dni);
+        $inicio_sql = mysqli_real_escape_string($mysqli, $fecha_inicio);
+        $fin_sql = mysqli_real_escape_string($mysqli, $fecha_fin);
+        $result2 = mysqli_query($mysqli, "SELECT nombre, apellido FROM empleados WHERE DNI = '$dni_sql'");
+        $empleado = $result2 ? mysqli_fetch_assoc($result2) : null;
+        $nombre = $empleado ? $empleado['apellido'] . ', ' . $empleado['nombre'] : 'Empleado';
+        $result = mysqli_query($mysqli, "SELECT periodo, salario FROM registro WHERE DNI = '$dni_sql' AND periodo BETWEEN '$inicio_sql' AND '$fin_sql' ORDER BY periodo");
+        if ($result && mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) $salarios[] = $row;
+            $inicio_salario = (float)$salarios[0]['salario'];
+            $fin_salario = (float)$salarios[count($salarios) - 1]['salario'];
+            $cambio_porcentaje = $inicio_salario != 0 ? (($fin_salario - $inicio_salario) / $inicio_salario) * 100 : 0;
+        } else $error = 'No encontramos liquidaciones para ese empleado en el período seleccionado.';
     }
-}
+} else $error = 'Seleccioná los datos del reporte para comenzar.';
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Evolución de Salarios</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            background-image: url("fondonaranja.jpeg");
-            background-size: cover; /* Esto hace que la imagen cubra toda la pantalla */
-            background-repeat: no-repeat; /* Esto evita que la imagen se repita */
-            background-position: center center; /* Esto centra la imagen */
-        
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        .report-container {
-            margin-top: 20px;
-        }
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .report-table th, .report-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        .report-table th {
-            background-color: #f2f2f2;
-        }
-        .report-table td {
-            background-color: #fff;
-        }
-        .report-container p {
-            font-size: 16px;
-            color: #333;
-            text-align: center;
-        }
-        .back-button {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            padding: 10px;
-            text-align: center;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Reporte de Evolución de Salarios</h1>
-        <?php
-        if (isset($error)) {
-            echo "<p>" . $error . "</p>";
-        } else {
-            echo "<div class='report-container'>";
-            echo "<h3 style='text-align: center;'> DNI: $dni | Nombre: $nombre</h3>";
-            echo "<p>Periodo: " . $fecha_inicio . " a " . $fecha_fin . "</p>";
-            echo "<table class='report-table'>";
-            echo "<tr><th>Periodo</th><th>Salario</th></tr>";
-            foreach ($salarios as $salario) {
-                echo "<tr><td>" . $salario['periodo'] . "</td><td>" . $salario['salario'] . "</td></tr>";
-            }
-            echo "</table>";
-            echo "<p>El salario ha ";
-            if ($cambio_porcentaje >= 0) {
-                echo "aumentado";
-            } else {
-                echo "disminuido";
-            }
-            echo " en un " . abs($cambio_porcentaje) . "% en el período seleccionado.</p>";
-            echo "</div>";
-        }
-        ?>
-        <a href="menusesiones.php" class="back-button">Volver al Menú</a>
-    </div>
-</body>
-</html>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Evolución salarial</title></head><body>
+<main class="screen-card report-card"><header class="screen-toolbar"><div class="title-block"><span class="eyebrow">Reportes</span><h1>Evolución salarial</h1><p>Detalle mensual del rango seleccionado.</p></div><a class="secondary-action" href="generarReporte.php">Nuevo reporte</a></header>
+<?php if ($error): ?><div class="empty-panel"><strong>No pudimos generar el reporte</strong><p><?php echo htmlspecialchars($error); ?></p></div>
+<?php else: ?><section class="report-summary"><div><span>Empleado</span><strong><?php echo htmlspecialchars($nombre); ?></strong><small>DNI <?php echo htmlspecialchars($dni); ?></small></div><div><span>Período analizado</span><strong><?php echo htmlspecialchars($fecha_inicio); ?> — <?php echo htmlspecialchars($fecha_fin); ?></strong><small><?php echo count($salarios); ?> liquidaciones</small></div><div class="metric <?php echo $cambio_porcentaje >= 0 ? 'positive' : 'negative'; ?>"><span>Variación</span><strong><?php echo ($cambio_porcentaje >= 0 ? '+' : '−') . number_format(abs($cambio_porcentaje), 2, ',', '.'); ?>%</strong><small>del primer al último período</small></div></section>
+<div class="table-shell"><table><thead><tr><th>Período</th><th>Importe liquidado</th></tr></thead><tbody><?php foreach ($salarios as $salario): ?><tr><td><strong><?php echo htmlspecialchars($salario['periodo']); ?></strong></td><td>$<?php echo number_format((float)$salario['salario'], 2, ',', '.'); ?></td></tr><?php endforeach; ?></tbody></table></div><?php endif; ?>
+</main></body></html>

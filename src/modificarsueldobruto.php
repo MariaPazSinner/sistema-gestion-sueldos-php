@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dni']) && !empty($_POS
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,14 +82,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dni']) && !empty($_POS
 </head>
 
 <body>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-        <fieldset style="font-family: Arial, sans-serif; width: 100%; background-color: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
-            <div style="text-align: center;">
-                <h2 style="font-family: Arial, sans-serif; font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">Modificar Salario Bruto</h2>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="screen-card compact-form">
+            <div class="screen-heading">
+                <span class="eyebrow">Equipo</span>
+                <h1>Actualizar salario bruto</h1>
+                <p>Elegí el empleado cuyo salario contractual necesitás modificar.</p>
             </div>
-            <div style="font-family: Arial, sans-serif; margin-bottom: 10px;">
-                <label style="font-family: Arial, sans-serif; display: block;">Seleccione DNI del empleado a modificar:</label>
-                <select name="dni" required style="font-family: Arial, sans-serif; width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <div>
+                <label for="dni-salario">Empleado</label>
+                <select id="dni-salario" name="dni" required>
                     <?php
                     include 'conexion.php';
 
@@ -112,11 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dni']) && !empty($_POS
                 </select>
             </div>
             <div>
-                <input type="submit" value="Enviar">
+                <input type="submit" value="Continuar">
             </div>
-            <br>
-            <a class="back-link" href="menusesiones.php">Ir al menú</a>
-        </fieldset>
     </form>
 
     <?php

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,10 +79,14 @@
     </style>
 </head>
 <body>
-    <h2>Alta de conceptos</h2>
-    <form action="cargarsueldoneto.php" method="POST">
+    <form action="cargarsueldoneto.php" method="POST" class="screen-card compact-form">
+        <div class="screen-heading">
+            <span class="eyebrow">Liquidaciones</span>
+            <h1>Nueva liquidación</h1>
+            <p>Seleccioná el empleado, el período y las novedades que intervienen en el cálculo.</p>
+        </div>
         <div>
-            <label>Ingrese DNI</label>
+            <label for="DNI">Empleado</label>
             <select id="DNI" name="DNI" required>
                 <?php
                 include "conexion.php";
@@ -106,24 +110,23 @@
             </select>
         </div>
         <div>
-            <label>Periodo:</label>
+            <label for="periodo">Período de liquidación</label>
             <input type="month" name="periodo" id="periodo" maxlength="7" required>
         </div>
         <div>
-            <h3>Conceptos:</h3>
-            <label>Ausencia Remunerada</label>
+            <h3>Novedades del período</h3>
+            <label for="cantidadAR">Días de ausencia remunerada</label>
             <input type="number" name="cantidadAR" id="cantidadAR" min="0" max="31" required>
-            <label>Ausencia No Remunerada</label>
+            <label for="cantidadANR">Días de ausencia no remunerada</label>
             <input type="number" name="cantidadANR" id="cantidadANR" min="0" max="31" required>
-            <label>Horas extra Feriado</label>
+            <label for="cantidadHEFER">Horas extra en feriados</label>
             <input type="number" name="cantidadHEFER" id="cantidadHEFER" min="0" max="150" required>
-            <label>Horas extra</label>
+            <label for="cantidadHE">Horas extra regulares</label>
             <input type="number" name="cantidadHE" id="cantidadHE" min="0" max="360" required>
         </div>
         <div>
-            <input type="submit" id="cargar" value="Cargar">
+            <input type="submit" id="cargar" value="Calcular liquidación">
         </div>
     </form>
-    <a href="menusesiones.php">Ir al menú</a>
 </body>
 </html>

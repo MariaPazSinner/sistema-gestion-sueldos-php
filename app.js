@@ -109,6 +109,39 @@
   const nativeAlert = window.alert.bind(window);
   window.alert = (message) => typeof message === 'string' ? showToast(message) : nativeAlert(message);
 
+  const askToDelete = (kind, proceed) => {
+    const isEmployee = kind === 'employee';
+    const modal = document.createElement('div');
+    modal.className = 'app-modal';
+    modal.innerHTML = `<div class="app-modal-card danger-modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-title">
+      <span class="modal-icon" aria-hidden="true">!</span>
+      <h3 id="delete-title">Confirmar eliminación</h3>
+      <p>${isEmployee ? 'Se eliminará este empleado y su información asociada.' : 'Se eliminará esta liquidación del historial.'} Esta acción no se puede deshacer.</p>
+      <div class="modal-actions"><button type="button" class="secondary-action cancel-delete">Cancelar</button><button type="button" class="confirm-delete">Sí, eliminar</button></div>
+    </div>`;
+    body.append(modal);
+    requestAnimationFrame(() => modal.classList.add('is-visible'));
+    const close = () => { modal.classList.remove('is-visible'); setTimeout(() => modal.remove(), 180); };
+    modal.querySelector('.cancel-delete').addEventListener('click', close);
+    modal.querySelector('.confirm-delete').addEventListener('click', () => { close(); proceed(); });
+    modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
+    modal.querySelector('.cancel-delete').focus();
+  };
+
+  document.querySelectorAll('form[data-confirm-delete]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      if (form.dataset.confirmed === 'true') return;
+      event.preventDefault();
+      askToDelete(form.dataset.confirmDelete, () => { form.dataset.confirmed = 'true'; form.requestSubmit(); });
+    });
+  });
+  document.querySelectorAll('a[data-confirm-delete]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      askToDelete(link.dataset.confirmDelete, () => { window.location.href = link.href; });
+    });
+  });
+
   document.querySelectorAll('.info-btn').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();

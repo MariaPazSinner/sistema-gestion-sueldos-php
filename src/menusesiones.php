@@ -102,22 +102,22 @@ $codigo_rol = $row['codigo_rol'];
         <form>
             <fieldset>
                 <div>
-                    <a href="mostrarsueldoneto.php">Mostrar listado</a>
+                    <a href="mostrarsueldoneto.php">Mostrar liquidaciones</a>
                 </div>
                 <div>
-                    <a href="altasueldoneto.php">Cargar Sueldo Neto</a>
+                    <a href="altasueldoneto.php">Nueva liquidación</a>
                 </div>
                 <div>
-                    <a href="altaempleados.php">Agregar Empleado</a>
+                    <a href="altaempleados.php">Agregar empleado</a>
                 </div>
                 <div>
-                    <a href="modificarsueldobruto.php">Modificar Sueldo Bruto</a>
+                    <a href="modificarsueldobruto.php">Actualizar salario bruto</a>
                 </div>
                 <div>
-                    <a href="consultardatos.php">Consultar datos de empleados</a>
+                    <a href="consultardatos.php">Gestionar empleados</a>
                 </div>
                 <div>
-                    <a href="generarReporte.php">Generar reporte</a>
+                    <a href="generarReporte.php">Reportes</a>
                 </div>
                 <div>
                     <a href="cerrarsesion.php">Cerrar sesión</a>

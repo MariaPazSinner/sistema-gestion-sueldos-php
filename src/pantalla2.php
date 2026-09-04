@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,10 +58,10 @@
     </style>
 </head>
 <body>
-    <form action="pantalla3.php" method="POST">
-        <fieldset style="font-family: Arial, sans-serif; width: 100%; margin: 50px auto; background-color: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
-            <div style="font-family: Arial, sans-serif; text-align: center;">
-                <h2>Modificar Salario Bruto</h2>
+    <form action="pantalla3.php" method="POST" class="screen-card compact-form">
+            <div class="screen-heading">
+                <span class="eyebrow">Equipo</span>
+                <h1>Confirmar nuevo salario</h1>
             </div>
             <div>
                 <?php
@@ -77,26 +77,21 @@
                         $apellido = $row['apellido'];
                         $salarioactual = $row['salarioBruto'];
                     
-                        echo "<h4>DNI ingresado: $dni</h4>";
-                        echo "<h4>Empleado: $nombre $apellido </h4>";
-                        echo "<h4>Salario bruto actual: $salarioactual </h4>";
+                        echo "<div class='employee-summary'><span><small>Empleado</small><strong>$nombre $apellido</strong></span><span><small>DNI</small><strong>$dni</strong></span><span><small>Salario actual</small><strong>$" . number_format($salarioactual, 2, ',', '.') . "</strong></span></div>";
                     } else {
                         echo "<h4>Error: No se encontró el empleado con DNI $dni.</h4>";
                     }
                 }
                 ?>
                 <div style="margin-bottom: 10px;">
-                    <h2>Ingrese el nuevo salario bruto:</h2>
-                    <input type="text" name="salariobrutonew" placeholder="Ingrese salario" required style="font-family: Arial, sans-serif; width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                    <label for="salariobrutonew">Nuevo salario bruto</label>
+                    <input id="salariobrutonew" type="number" min="1" step="0.01" name="salariobrutonew" placeholder="Ingresá el nuevo importe" required>
                 </div>
                 <div>
                     <input type="hidden" name="dni" value="<?php echo htmlspecialchars($dni); ?>">
-                    <input type="submit" value="Enviar">
+                    <div class="form-actions"><a class="secondary-action" href="modificarsueldobruto.php">Cancelar</a><input type="submit" value="Actualizar salario"></div>
                 </div>
             </div>
-            <br>
-            <a class="back-link" href="menusesiones.php">Ir al menú</a>
-        </fieldset>
     </form>
 </body>
 </html>
