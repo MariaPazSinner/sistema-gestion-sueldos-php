@@ -71,6 +71,19 @@ CREATE TABLE `registro` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `liquidacion_detalle` (
+  `id_registro` int NOT NULL,
+  `sueldo_bruto` decimal(14,2) NOT NULL,
+  `ajustes` decimal(14,2) NOT NULL,
+  `aporte_jubilatorio` decimal(14,2) NOT NULL,
+  `obra_social` decimal(14,2) NOT NULL,
+  `inssjp` decimal(14,2) NOT NULL,
+  `total_descuentos` decimal(14,2) NOT NULL,
+  PRIMARY KEY (`id_registro`),
+  CONSTRAINT `detalle_registro_fk` FOREIGN KEY (`id_registro`) REFERENCES `registro` (`id_registro`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `registro_respaldo` (
   `id` int NOT NULL AUTO_INCREMENT,
   `DNI` int NOT NULL,

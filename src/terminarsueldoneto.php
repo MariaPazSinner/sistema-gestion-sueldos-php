@@ -37,6 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $totalSql = (float)$totalSueldo;
             if (mysqli_query($mysqli, "INSERT INTO registro (DNI, periodo, salario) VALUES ('$dniSql', '$periodoSql', '$totalSql')")) {
                 $registroId = mysqli_insert_id($mysqli);
+                mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS liquidacion_detalle (id_registro INT PRIMARY KEY, sueldo_bruto DECIMAL(14,2) NOT NULL, ajustes DECIMAL(14,2) NOT NULL, aporte_jubilatorio DECIMAL(14,2) NOT NULL, obra_social DECIMAL(14,2) NOT NULL, inssjp DECIMAL(14,2) NOT NULL, total_descuentos DECIMAL(14,2) NOT NULL)");
+                $ajustesSql = (float)$sumaConceptos;
+                mysqli_query($mysqli, "INSERT INTO liquidacion_detalle (id_registro, sueldo_bruto, ajustes, aporte_jubilatorio, obra_social, inssjp, total_descuentos) VALUES ($registroId, $sueldoBruto, $ajustesSql, $aporteJubilatorio, $obraSocial, $inssjp, $totalDescuentos)");
                 $guardado = true;
             } else $error = 'No pudimos registrar la liquidación. Revisá los importes e intentá nuevamente.';
         }

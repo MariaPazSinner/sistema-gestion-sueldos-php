@@ -1,13 +1,17 @@
 <?php
 include 'conexion.php';
 $id = (int)($_GET['id'] ?? 0);
-$resultado = mysqli_query($mysqli, "SELECT r.id_registro, r.periodo, r.salario, e.DNI, e.nombre, e.apellido, e.salarioBruto FROM registro r JOIN empleados e ON r.DNI=e.DNI WHERE r.id_registro=$id LIMIT 1");
+mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS liquidacion_detalle (id_registro INT PRIMARY KEY, sueldo_bruto DECIMAL(14,2) NOT NULL, ajustes DECIMAL(14,2) NOT NULL, aporte_jubilatorio DECIMAL(14,2) NOT NULL, obra_social DECIMAL(14,2) NOT NULL, inssjp DECIMAL(14,2) NOT NULL, total_descuentos DECIMAL(14,2) NOT NULL)");
+$resultado = mysqli_query($mysqli, "SELECT r.id_registro, r.periodo, r.salario, e.DNI, e.nombre, e.apellido, e.salarioBruto, ld.sueldo_bruto, ld.ajustes, ld.aporte_jubilatorio, ld.obra_social, ld.inssjp, ld.total_descuentos FROM registro r JOIN empleados e ON r.DNI=e.DNI LEFT JOIN liquidacion_detalle ld ON r.id_registro=ld.id_registro WHERE r.id_registro=$id LIMIT 1");
 $dato = $resultado ? mysqli_fetch_assoc($resultado) : null;
 if ($dato) {
-    $bruto = (float)$dato['salarioBruto']; $neto = (float)$dato['salario'];
-    $jubilacion = $bruto * .11; $obraSocial = $bruto * .03; $inssjp = $bruto * .03;
-    $descuentos = $jubilacion + $obraSocial + $inssjp;
-    $ajustes = $neto - $bruto + $descuentos;
+    $bruto = $dato['sueldo_bruto'] !== null ? (float)$dato['sueldo_bruto'] : (float)$dato['salarioBruto'];
+    $neto = (float)$dato['salario'];
+    $jubilacion = $dato['aporte_jubilatorio'] !== null ? (float)$dato['aporte_jubilatorio'] : $bruto * .11;
+    $obraSocial = $dato['obra_social'] !== null ? (float)$dato['obra_social'] : $bruto * .03;
+    $inssjp = $dato['inssjp'] !== null ? (float)$dato['inssjp'] : $bruto * .03;
+    $descuentos = $dato['total_descuentos'] !== null ? (float)$dato['total_descuentos'] : $jubilacion + $obraSocial + $inssjp;
+    $ajustes = $dato['ajustes'] !== null ? (float)$dato['ajustes'] : $neto - $bruto + $descuentos;
 }
 function importe($valor) { return '$' . number_format((float)$valor, 2, ',', '.'); }
 ?>

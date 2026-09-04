@@ -64,7 +64,7 @@ body > fieldset,
 body > .container,
 body > .message,
 body > div:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal) {
-  width: min(100%, 1040px) !important;
+  width: min(100%, 1120px) !important;
   margin: 0 auto 24px !important;
 }
 
@@ -309,7 +309,7 @@ tbody tr:hover td { background: #fff8f3 !important; }
 .page-logininiciosesiones fieldset > div:nth-last-of-type(-n+2) { text-align: center; }
 .page-logininiciosesiones fieldset > div:nth-last-of-type(-n+2) a { display: inline-block; margin: 7px 10px 0; }
 
-.page-menusesiones .container { max-width: 920px !important; text-align: left !important; }
+.page-menusesiones .container { max-width: 1120px !important; text-align: left !important; }
 .page-menusesiones .container h1::after {
   content: "Elegí una tarea para continuar";
   display: block; margin-top: 8px; color: var(--muted);
