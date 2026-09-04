@@ -437,6 +437,9 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
 .empty-state { padding: 34px !important; color: var(--muted); text-align: center; }
 .status-message { padding: 12px 14px; border-radius: 11px; color: #24633c; background: #eaf7ee; }
 .employee-summary, .report-intro { display: grid; gap: 4px; margin: 0 0 22px; padding: 16px 18px; border: 1px solid #f0d8ca; border-radius: 14px; background: #fff8f3; }
+.employee-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.employee-summary > span { display: grid; gap: 5px; }
+.employee-summary small { color: var(--muted); }
 .employee-summary span, .report-intro span { color: var(--muted); line-height: 1.45; }
 .report-summary { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-bottom: 24px; }
 .report-summary > div { display: grid; gap: 7px; padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: #f8fafc; }
@@ -457,5 +460,6 @@ a.back-link[href="menusesiones.php"], a.back-button[href="menusesiones.php"], bo
   .screen-toolbar { flex-direction: column; }
   .screen-toolbar .primary-action { width: 100%; }
   .filter-grid, .report-summary { grid-template-columns: 1fr; }
+  .employee-summary { grid-template-columns: 1fr; }
   .filter-actions, .form-actions { flex-wrap: wrap; }
 }
