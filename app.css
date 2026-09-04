@@ -302,7 +302,9 @@ tbody tr:hover td { background: #fff8f3 !important; }
 .page-recuperaContrasenia { display: grid !important; place-items: center; padding-top: 90px !important; }
 .page-logininiciosesiones > form,
 .page-altaUsuarios > form,
-.page-recuperaContrasenia > form { max-width: 460px !important; }
+.page-recuperaContrasenia > form { max-width: 1120px !important; }
+.page-logininiciosesiones > form fieldset { max-width: 520px; margin: 0 auto; }
+.page-logininiciosesiones > form > h2 { max-width: 520px; margin-left: auto !important; margin-right: auto !important; }
 .page-logininiciosesiones input[type="submit"],
 .page-altaUsuarios input[type="submit"],
 .page-recuperaContrasenia button[type="submit"] { width: 100% !important; margin-right: 0 !important; }
@@ -349,7 +351,8 @@ tbody tr:hover td { background: #fff8f3 !important; }
 }
 .page-menusesiones fieldset a:hover,
 .page-menusesiones fieldset button:hover { transform: translateY(-3px); border-color: rgba(215,96,43,.38) !important; }
-.page-menusesiones fieldset div:last-child a { color: var(--danger) !important; }
+.logout-link { display: block !important; width: max-content !important; margin: 24px auto 0 !important; padding: 0 0 2px !important; color: var(--danger) !important; text-decoration: underline !important; background: transparent !important; box-shadow: none !important; }
+.logout-link:hover { color: #8f2626 !important; transform: none !important; }
 
 #empleados-table { width: min(100%, 1040px) !important; margin: 24px auto !important; overflow-x: auto; }
 #puesto-filter { max-width: 420px; margin-left: auto !important; margin-right: auto !important; }
@@ -406,7 +409,7 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
   border: 1px solid rgba(255,255,255,.58); border-radius: 24px;
   background: rgba(255,255,255,.96); box-shadow: var(--shadow); box-sizing: border-box;
 }
-.screen-card.wide-card, .screen-card.compact-form, .screen-card.report-card { width: min(100%, 1120px); }
+.screen-card.wide-card, .screen-card.compact-form, .screen-card.report-card { width: min(100%, 1120px); max-width: 1120px !important; }
 .screen-heading { margin-bottom: 28px; }
 .screen-heading h1, .title-block h1 { margin: 5px 0 8px; text-align: left; }
 .screen-heading p, .title-block p { max-width: 680px; margin: 0; color: var(--muted); line-height: 1.55; }
@@ -484,6 +487,7 @@ a.back-link[href="menusesiones.php"], a.back-button[href="menusesiones.php"], bo
 .review-list > div { display: grid; gap: 3px; padding: 11px 12px; border-radius: 10px; background: #f6f8fb; }
 .review-list span { color: var(--muted); font-size: .78rem; }
 .confirm-review { color: #fff; background: var(--brand) !important; }
+.success-icon { background: var(--success); }
 
 @media (max-width: 760px) {
   .screen-card { padding: 24px 18px; border-radius: 18px; }

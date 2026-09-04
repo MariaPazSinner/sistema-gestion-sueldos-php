@@ -168,6 +168,22 @@
     });
   }
 
+  if (page === 'modificarsueldobruto') {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('salary_updated') || params.has('salary_error')) {
+      const success = params.has('salary_updated');
+      const modal = document.createElement('div');
+      modal.className = 'app-modal';
+      const employee = params.get('employee') || 'el empleado';
+      const amount = params.get('amount') || '';
+      modal.innerHTML = `<div class="app-modal-card result-modal" role="dialog" aria-modal="true" aria-labelledby="salary-result-title"><span class="modal-icon ${success ? 'success-icon' : ''}" aria-hidden="true">${success ? '✓' : '!'}</span><h3 id="salary-result-title">${success ? 'Salario actualizado' : 'No pudimos actualizar el salario'}</h3><p>${success ? `El nuevo salario bruto de ${employee} es $${amount}.` : 'Revisá la información e intentá nuevamente.'}</p><div class="modal-actions"><button type="button" class="confirm-review close-result">Entendido</button></div></div>`;
+      body.append(modal);
+      requestAnimationFrame(() => modal.classList.add('is-visible'));
+      modal.querySelector('.close-result').addEventListener('click', () => { modal.classList.remove('is-visible'); setTimeout(() => modal.remove(), 180); });
+      history.replaceState({}, '', 'modificarsueldobruto.php');
+    }
+  }
+
   document.querySelectorAll('.info-btn').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();

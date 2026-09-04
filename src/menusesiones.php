@@ -119,11 +119,9 @@ $codigo_rol = $row['codigo_rol'];
                 <div>
                     <a href="generarReporte.php">Reportes</a>
                 </div>
-                <div>
-                    <a href="cerrarsesion.php">Cerrar sesión</a>
-                </div>
             </fieldset>
         </form>
+        <a href="cerrarsesion.php" class="logout-link">Cerrar sesión</a>
         <?php else: // Consultar el rol del usuario
         $query2 = "SELECT DNI FROM empleados WHERE id_usuario = '$usuario'";
         $result2 = mysqli_query($mysqli, $query2);
@@ -136,11 +134,9 @@ $codigo_rol = $row['codigo_rol'];
                 <div>
                     <button class="back-link" type="submit">Mostrar listado</button>
                 </div>
-                <div>
-                    <a href="cerrarsesion.php" class="back-link">Cerrar sesión</a>
-                </div>
             </fieldset>
         </form>
+        <a href="cerrarsesion.php" class="logout-link">Cerrar sesión</a>
         <?php endif; ?>
     </div>
 </body>
