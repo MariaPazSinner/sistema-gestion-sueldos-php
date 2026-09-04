@@ -388,7 +388,8 @@ body > *:not(.app-header):not(.app-menu):not(.app-toast):not(.app-modal):not(scr
 @media (max-width: 760px) {
   body { padding: 88px 14px 30px !important; }
   .app-header { inset: 12px 12px auto; }
-  .app-brand span { display: none; }
+  .app-brand > span:not(.app-brand-mark) { display: none; }
+  .app-brand .app-brand-mark { display: grid; }
   body > form, body > fieldset, .container, .message { padding: 22px 18px !important; }
   .page-menusesiones fieldset { grid-template-columns: 1fr; }
   table { min-width: 680px; }
