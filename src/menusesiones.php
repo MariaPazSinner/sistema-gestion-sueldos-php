@@ -134,6 +134,9 @@ $codigo_rol = $row['codigo_rol'];
                 <div>
                     <button class="back-link" type="submit">Mis liquidaciones</button>
                 </div>
+                <div>
+                    <a href="misdatos.php">Modificar mis datos personales</a>
+                </div>
             </fieldset>
         </form>
         <a href="cerrarsesion.php" class="logout-link">Cerrar sesión</a>

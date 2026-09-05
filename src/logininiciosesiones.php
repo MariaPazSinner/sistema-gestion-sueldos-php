@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Usuario encontrado, iniciar sesión
         $_SESSION['usuario'] = $usuario; // Guardar el usuario en la sesión
         $_SESSION['dni'] = $dni; // Guardar el DNI en la sesión
+        $_SESSION['codigo_rol'] = $result->fetch_assoc()['codigo_rol'] ?? 0;
 
         // Redirigir a la página del menú
         header("Location: menusesiones.php");

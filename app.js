@@ -13,10 +13,13 @@
     modificarsueldobruto: 'Actualizar salarios',
     consultardatos: 'Equipo',
     generarReporte: 'Reportes'
+    ,mostrarregistroempleado: 'Mis liquidaciones'
+    ,misdatos: 'Mis datos personales'
   };
   const icons = {
     mostrarsueldoneto: '≡', altasueldoneto: '+', altaempleados: '＋',
-    modificarsueldobruto: '↗', consultardatos: '◎', generarReporte: '▥'
+    modificarsueldobruto: '↗', consultardatos: '◎', generarReporte: '▥',
+    mostrarregistroempleado: '≡', misdatos: '○'
   };
   const descriptions = {
     mostrarsueldoneto: 'Consultar y administrar recibos',
@@ -24,7 +27,9 @@
     altaempleados: 'Incorporar personal',
     modificarsueldobruto: 'Actualizar remuneraciones',
     consultardatos: 'Ver y editar legajos',
-    generarReporte: 'Analizar evolución salarial'
+    generarReporte: 'Analizar evolución salarial',
+    mostrarregistroempleado: 'Consultar y descargar recibos',
+    misdatos: 'Actualizar correo y contraseña'
   };
 
   const header = document.createElement('header');
@@ -43,7 +48,9 @@
     menu.id = 'app-menu';
     menu.className = 'app-menu';
     menu.setAttribute('aria-label', 'Navegación principal');
-    const availableItems = userRole === '1' ? [] : Object.entries(labels);
+    const availableItems = userRole === '1'
+      ? [['mostrarregistroempleado', labels.mostrarregistroempleado], ['misdatos', labels.misdatos]]
+      : Object.entries(labels).filter(([key]) => !['mostrarregistroempleado', 'misdatos'].includes(key));
     menu.innerHTML = `<div class="app-menu-label">${userRole === '1' ? 'Perfil empleado' : 'Operaciones'}</div>` +
       availableItems.map(([href, label]) => `
         <a href="${href}.php" class="${page === href ? 'is-current' : ''}">

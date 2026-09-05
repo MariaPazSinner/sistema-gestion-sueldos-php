@@ -501,12 +501,31 @@ a.back-link[href="menusesiones.php"], a.back-button[href="menusesiones.php"], bo
 .review-list span { color: var(--muted); font-size: .78rem; }
 .confirm-review { color: #fff; background: var(--brand) !important; }
 .success-icon { background: var(--success); }
+.employee-context { display: grid; gap: 4px; margin-bottom: 20px; padding: 16px 18px; border: 1px solid #f0d4c5; border-radius: 14px; background: #fff8f3; }
+.employee-context span, .employee-context small { color: var(--muted); }
+.employee-filter { display: grid; grid-template-columns: minmax(240px, 420px) auto; align-items: end; gap: 16px; }
+.employee-filter input { margin-bottom: 0 !important; }
+.profile-layout { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+.locked-data, .editable-data { padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: #f8fafc; }
+.locked-data h2, .editable-data h2 { margin-bottom: 6px !important; font-size: 1.15rem !important; text-align: left; }
+.locked-data > p, .editable-data > p { margin-top: 0; }
+.locked-data dl { display: grid; gap: 0; margin: 20px 0 0; }
+.locked-data dl div { display: flex; justify-content: space-between; gap: 18px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.locked-data dl div:last-child { border-bottom: 0; }
+.locked-data dt { color: var(--muted); }
+.locked-data dd { margin: 0; font-weight: 700; text-align: right; }
+.editable-data { background: #fff; }
+.editable-data > small { display: block; margin-top: -10px; color: var(--muted); }
+.profile-message { padding: 13px 15px; border-radius: 12px; }
+.profile-message.success { color: #17613e; background: #e9f7ef; }
+.profile-message.error { color: #8f2e2e; background: #fff0ef; }
 
 @media (max-width: 760px) {
   .screen-card { padding: 24px 18px; border-radius: 18px; }
   .screen-toolbar { flex-direction: column; }
   .screen-toolbar .primary-action { width: 100%; }
   .filter-grid, .report-summary, .payroll-summary, .payroll-columns, .review-list { grid-template-columns: 1fr; }
+  .profile-layout, .employee-filter { grid-template-columns: 1fr; }
   .employee-summary { grid-template-columns: 1fr; }
   .filter-actions, .form-actions { flex-wrap: wrap; }
   .page-logininiciosesiones > form { grid-template-columns: 1fr; gap: 10px; width: calc(100vw - 28px) !important; }

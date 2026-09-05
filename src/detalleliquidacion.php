@@ -1,8 +1,11 @@
 <?php
+session_start();
 include 'conexion.php';
+if (!isset($_SESSION['usuario'])) { header('Location: logininiciosesiones.php'); exit(); }
 $id = (int)($_GET['id'] ?? 0);
 mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS liquidacion_detalle (id_registro INT PRIMARY KEY, sueldo_bruto DECIMAL(14,2) NOT NULL, ajustes DECIMAL(14,2) NOT NULL, aporte_jubilatorio DECIMAL(14,2) NOT NULL, obra_social DECIMAL(14,2) NOT NULL, inssjp DECIMAL(14,2) NOT NULL, total_descuentos DECIMAL(14,2) NOT NULL)");
-$resultado = mysqli_query($mysqli, "SELECT r.id_registro, r.periodo, r.salario, e.DNI, e.nombre, e.apellido, e.salarioBruto, ld.sueldo_bruto, ld.ajustes, ld.aporte_jubilatorio, ld.obra_social, ld.inssjp, ld.total_descuentos FROM registro r JOIN empleados e ON r.DNI=e.DNI LEFT JOIN liquidacion_detalle ld ON r.id_registro=ld.id_registro WHERE r.id_registro=$id LIMIT 1");
+$restriccion = (($_SESSION['codigo_rol'] ?? 0) == 1) ? ' AND r.DNI=' . (int)($_SESSION['dni'] ?? 0) : '';
+$resultado = mysqli_query($mysqli, "SELECT r.id_registro, r.periodo, r.salario, e.DNI, e.nombre, e.apellido, e.salarioBruto, ld.sueldo_bruto, ld.ajustes, ld.aporte_jubilatorio, ld.obra_social, ld.inssjp, ld.total_descuentos FROM registro r JOIN empleados e ON r.DNI=e.DNI LEFT JOIN liquidacion_detalle ld ON r.id_registro=ld.id_registro WHERE r.id_registro=$id$restriccion LIMIT 1");
 $dato = $resultado ? mysqli_fetch_assoc($resultado) : null;
 if ($dato) {
     $bruto = $dato['sueldo_bruto'] !== null ? (float)$dato['sueldo_bruto'] : (float)$dato['salarioBruto'];
