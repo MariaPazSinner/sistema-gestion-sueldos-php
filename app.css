@@ -303,8 +303,14 @@ tbody tr:hover td { background: #fff8f3 !important; }
 .page-logininiciosesiones > form,
 .page-altaUsuarios > form,
 .page-recuperaContrasenia > form { max-width: 1120px !important; }
-.page-logininiciosesiones > form fieldset { max-width: 520px; margin: 0 auto; }
-.page-logininiciosesiones > form > h2 { max-width: 520px; margin-left: auto !important; margin-right: auto !important; }
+.page-logininiciosesiones > form {
+  display: grid; grid-template-columns: minmax(260px, .8fr) minmax(360px, 1fr); align-items: center; gap: clamp(36px, 7vw, 96px);
+  width: min(1120px, calc(100vw - 48px)) !important;
+}
+.page-logininiciosesiones > form fieldset { width: 100%; max-width: 520px; margin: 0 auto; }
+.page-logininiciosesiones > form > h2 { align-self: start; margin-top: 22px !important; text-align: left; }
+.page-logininiciosesiones > form > h2::after { content: "Administrá personas, liquidaciones y reportes desde un único lugar."; display: block; max-width: 360px; margin-top: 14px; color: var(--muted); font: 500 1rem/1.55 "DM Sans", sans-serif; letter-spacing: 0; }
+.page-logininiciosesiones > form > p { grid-column: 2; }
 .page-logininiciosesiones input[type="submit"],
 .page-altaUsuarios input[type="submit"],
 .page-recuperaContrasenia button[type="submit"] { width: 100% !important; margin-right: 0 !important; }
@@ -496,6 +502,9 @@ a.back-link[href="menusesiones.php"], a.back-button[href="menusesiones.php"], bo
   .filter-grid, .report-summary, .payroll-summary, .payroll-columns, .review-list { grid-template-columns: 1fr; }
   .employee-summary { grid-template-columns: 1fr; }
   .filter-actions, .form-actions { flex-wrap: wrap; }
+  .page-logininiciosesiones > form { grid-template-columns: 1fr; gap: 10px; width: calc(100vw - 28px) !important; }
+  .page-logininiciosesiones > form > h2 { margin-top: 0 !important; }
+  .page-logininiciosesiones > form > p { grid-column: 1; }
 }
 
 @media print {
