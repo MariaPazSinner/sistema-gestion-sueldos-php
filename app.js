@@ -2,6 +2,8 @@
   const body = document.body;
   const page = body.dataset.page || '';
   body.classList.add(`page-${page}`);
+  if (body.dataset.role) sessionStorage.setItem('payroll-role', body.dataset.role);
+  const userRole = body.dataset.role || sessionStorage.getItem('payroll-role') || '0';
 
   const publicPages = new Set(['logininiciosesiones', 'altaUsuarios', 'recuperaContrasenia', 'confirmacionUsuario']);
   const labels = {
@@ -41,8 +43,9 @@
     menu.id = 'app-menu';
     menu.className = 'app-menu';
     menu.setAttribute('aria-label', 'Navegación principal');
-    menu.innerHTML = '<div class="app-menu-label">Operaciones</div>' +
-      Object.entries(labels).map(([href, label]) => `
+    const availableItems = userRole === '1' ? [] : Object.entries(labels);
+    menu.innerHTML = `<div class="app-menu-label">${userRole === '1' ? 'Perfil empleado' : 'Operaciones'}</div>` +
+      availableItems.map(([href, label]) => `
         <a href="${href}.php" class="${page === href ? 'is-current' : ''}">
           <span class="app-menu-icon" aria-hidden="true">${icons[href]}</span>${label}
         </a>`).join('') +

@@ -94,7 +94,7 @@ $codigo_rol = $row['codigo_rol'];
         
     </style>
 </head>
-<body>
+<body data-role="<?php echo (int)$codigo_rol; ?>">
     <div class="container">
         <h1>Bienvenido, <?php echo htmlspecialchars($usuario); ?></h1>
 
@@ -132,7 +132,7 @@ $codigo_rol = $row['codigo_rol'];
             <input type="hidden" name="DNI" value="<?php echo $dni; ?>">
             <fieldset>
                 <div>
-                    <button class="back-link" type="submit">Mostrar listado</button>
+                    <button class="back-link" type="submit">Mis liquidaciones</button>
                 </div>
             </fieldset>
         </form>

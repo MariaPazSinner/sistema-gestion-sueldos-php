@@ -110,7 +110,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <form action="logininiciosesiones.php" method="POST">
-        <h2>Login</h2>
+        <div class="login-intro">
+            <h2>Login</h2>
+            <p class="login-description">Administrá personas, liquidaciones y reportes desde un único lugar.</p>
+            <aside class="demo-readme" aria-label="Accesos de demostración">
+                <span class="eyebrow">Acceso de demostración</span>
+                <h3>Probá ambos perfiles</h3>
+                <div class="demo-account"><strong>Administrador</strong><span>Usuario: <code>demo</code></span><span>Contraseña: <code>demo1234</code></span><span>DNI: <code>10000000</code></span></div>
+                <div class="demo-account"><strong>Empleado</strong><span>Usuario: <code>empleado.demo</code></span><span>Contraseña: <code>demo1234</code></span><span>DNI: <code>20000000</code></span></div>
+            </aside>
+        </div>
         <fieldset>
             <div>
                 <label for="usuario">Usuario:</label>
